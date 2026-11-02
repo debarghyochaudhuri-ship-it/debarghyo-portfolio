@@ -1330,7 +1330,20 @@
             display: block;
         }
 
-        .modal:not(.is-fullscreen) .modal-carousel.modal-carousel-scrumboard .modal-carousel-track {
+        /* Export Comments Quick Read Carousel - Locked Fixed Frame & Consistent Scale */
+        .modal:not(.is-fullscreen) .modal-carousel.modal-carousel-export-comments {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 2446 / 1658;
+            height: auto;
+            min-height: 0 !important;
+            max-height: none !important;
+            overflow: hidden;
+            display: block;
+        }
+
+        .modal:not(.is-fullscreen) .modal-carousel.modal-carousel-scrumboard .modal-carousel-track,
+        .modal:not(.is-fullscreen) .modal-carousel.modal-carousel-export-comments .modal-carousel-track {
             position: absolute;
             inset: 0;
             width: 100%;
@@ -1344,7 +1357,8 @@
             z-index: 1;
         }
 
-        .modal:not(.is-fullscreen) .modal-carousel.modal-carousel-scrumboard .modal-carousel-img {
+        .modal:not(.is-fullscreen) .modal-carousel.modal-carousel-scrumboard .modal-carousel-img,
+        .modal:not(.is-fullscreen) .modal-carousel.modal-carousel-export-comments .modal-carousel-img {
             width: 100%;
             height: 100%;
             max-width: 100%;
@@ -1358,7 +1372,8 @@
         }
 
         @media (max-width: 680px) {
-            .modal:not(.is-fullscreen) .modal-carousel.modal-carousel-scrumboard .modal-carousel-track {
+            .modal:not(.is-fullscreen) .modal-carousel.modal-carousel-scrumboard .modal-carousel-track,
+            .modal:not(.is-fullscreen) .modal-carousel.modal-carousel-export-comments .modal-carousel-track {
                 padding: 10px;
             }
         }

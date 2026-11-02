@@ -2078,6 +2078,8 @@ export default function PortfolioPage() {
                 className={`modal-carousel ${
                   activeProject.id === "scrumboard"
                     ? "modal-carousel-scrumboard"
+                    : activeProject.id === "export-comments"
+                    ? "modal-carousel-export-comments"
                     : ""
                 }`}
                 onTouchStart={handleTouchStart}
