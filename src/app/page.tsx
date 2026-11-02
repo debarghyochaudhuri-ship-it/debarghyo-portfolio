@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 
 interface MetricItem {
   val: string;
@@ -713,7 +712,7 @@ const processSteps: ProcessStep[] = [
   },
 ];
 
-export default function PortfolioPageV2() {
+export default function PortfolioPage() {
   const [activeModalIndex, setActiveModalIndex] = useState<number | null>(null);
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
   const [isFullscreenViewer, setIsFullscreenViewer] = useState<boolean>(false);
@@ -726,13 +725,15 @@ export default function PortfolioPageV2() {
   const scrollPosRef = React.useRef<number>(0);
   const videoRef = React.useRef<HTMLVideoElement>(null);
 
-  // Smooth video completion and subtle blur transition (zero jerk, silky ease into pause)
+  // Smooth video completion and subtle blur transition (zero jerk, silky ease into pause, plays once)
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
     video.defaultMuted = true;
     video.muted = true;
+    video.playsInline = true;
+    video.loop = false;
     video.playbackRate = 1.0;
     video.play().catch(() => {});
 
@@ -877,6 +878,7 @@ export default function PortfolioPageV2() {
 
     if (prefersReducedMotion) {
       cards.forEach((card) => {
+        card.style.top = "";
         card.style.transform = "";
         card.style.filter = "";
         card.style.opacity = "";
@@ -906,7 +908,15 @@ export default function PortfolioPageV2() {
 
     const updateStacking = () => {
       const isMobile = window.innerWidth <= 767;
-      const isTablet = window.innerWidth <= 1024 && !isMobile;
+      const isTouchDevice =
+        typeof navigator !== "undefined" &&
+        (navigator.maxTouchPoints > 0 ||
+          Number(((navigator as unknown) as { msMaxTouchPoints?: number }).msMaxTouchPoints || 0) > 0);
+      const isTablet =
+        !isMobile &&
+        (window.innerWidth <= 1024 ||
+          (isTouchDevice && window.innerWidth <= 1366) ||
+          (window.innerWidth <= 1366 && window.innerHeight <= 920));
       const baseTop = isMobile ? 48 : isTablet ? 54 : 60;
       const stepOffset = isMobile ? 0 : isTablet ? 0 : 50;
       const travelDist = isMobile ? 180 : 250;
@@ -926,31 +936,33 @@ export default function PortfolioPageV2() {
       }
 
       if (isMobile || isTablet) {
-        // Tablet and mobile: all cards participate in a continuous, stable stacking sequence.
-        // No hiding, no sudden opacity or visibility changes.
-        // All cards remain visible in the DOM in their natural stacking order.
-        cards.forEach((card) => {
-          card.style.visibility = "visible";
-          card.style.opacity = "1";
+        // Mobile & Tablet: all cards align identically at baseTop.
+        // When card k+1 reaches near full overlap (p[k+1] >= 0.98), card k is cleanly hidden
+        // so no bottom edge, border, or text peeks out behind the active card.
+        cards.forEach((card, k) => {
+          card.style.top = `${baseTop}px`;
+          const isCovered = k < N - 1 && p[k + 1] >= 0.98;
+          card.style.visibility = isCovered ? "hidden" : "visible";
+          card.style.opacity = isCovered ? "0" : "1";
           card.style.transform = "none";
           card.style.filter = "none";
-          card.style.pointerEvents = "auto";
+          card.style.pointerEvents = isCovered ? "none" : "auto";
           card.style.borderColor = "rgba(255, 255, 255, 0.10)";
 
           const titleEl = card.querySelector<HTMLElement>(".v2-project-bigtitle");
           const leftEl = card.querySelector<HTMLElement>(".v2-card-left");
           const mockup = card.querySelector<HTMLElement>(".v2-mockup-wrapper");
-          if (titleEl) titleEl.style.opacity = "1";
+          if (titleEl) titleEl.style.opacity = isCovered ? "0" : "1";
           if (leftEl) {
             const subContent = leftEl.querySelectorAll<HTMLElement>(
               ".v2-project-category-label, .v2-card-section-group, .v2-card-bottom-group"
             );
             subContent.forEach((el) => {
-              el.style.opacity = "1";
+              el.style.opacity = isCovered ? "0" : "1";
             });
           }
           if (mockup) {
-            mockup.style.opacity = "1";
+            mockup.style.opacity = isCovered ? "0" : "1";
             mockup.style.transform = "none";
           }
         });
@@ -958,6 +970,7 @@ export default function PortfolioPageV2() {
       } else {
         // Desktop: PRESERVE EXACT EXISTING BEHAVIOUR COMPLETELY
         cards.forEach((card, k) => {
+          card.style.top = "";
           let stackDepth = 0;
           for (let j = k + 1; j < N; j++) {
             stackDepth += p[j];
@@ -1279,10 +1292,10 @@ export default function PortfolioPageV2() {
               muted
               playsInline
               poster="/images/hero-cinematic.png"
+              preload="auto"
+              disablePictureInPicture
+              disableRemotePlayback
               aria-hidden="true"
-              onEnded={(e) => {
-                e.currentTarget.pause();
-              }}
             >
               <source src="/videos/hero-background.mp4" type="video/mp4" />
               <img
@@ -1324,9 +1337,9 @@ export default function PortfolioPageV2() {
                 I design digital products that bring user needs and business goals together by focusing on simplifying complex workflows and creating intuitive experiences.
               </p>
 
-              <div className="v2-actions-row">
+              <div className="v2-actions-row v2-hero-actions">
                 <a
-                  href="https://drive.google.com/file/d/1LuaCBRZfmTEoahMS3lKLrhAPEwwz71nV/view?usp=drive_link"
+                  href="https://drive.google.com/file/d/1zuY2GUiRSBCEYxxKPc02o1fdFl-jTHTh/view?usp=sharing"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="v2-btn-readstudy"
@@ -2036,12 +2049,23 @@ export default function PortfolioPageV2() {
               aria-label={isFullscreenViewer ? "Return to Quick Read" : "Close dialog"}
               title={isFullscreenViewer ? "Return to Quick Read (Esc)" : "Close (Esc)"}
               onClick={(e) => {
+                e.preventDefault();
                 e.stopPropagation();
                 if (isFullscreenViewer) {
                   setIsFullscreenViewer(false);
                 } else {
                   setActiveModalIndex(null);
                 }
+              }}
+              onPointerDown={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+              onTouchStart={(e) => {
+                e.stopPropagation();
+              }}
+              onTouchEnd={(e) => {
+                e.stopPropagation();
               }}
             >
               &times;
@@ -2051,7 +2075,11 @@ export default function PortfolioPageV2() {
               <div id="modalDynamicContent" className="modal-scroll-body">
               {/* TOP CAROUSEL / FULLSCREEN IMAGE VIEWER */}
               <div
-                className="modal-carousel"
+                className={`modal-carousel ${
+                  activeProject.id === "scrumboard"
+                    ? "modal-carousel-scrumboard"
+                    : ""
+                }`}
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
               >
@@ -2074,10 +2102,21 @@ export default function PortfolioPageV2() {
                     aria-label="View screenshot in full screen"
                     title="Expand to full screen"
                     onClick={(e) => {
+                      e.preventDefault();
                       e.stopPropagation();
                       savedModalScrollRef.current =
                         document.getElementById("modalDynamicContent")?.scrollTop || 0;
                       setIsFullscreenViewer(true);
+                    }}
+                    onPointerDown={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    onTouchStart={(e) => {
+                      e.stopPropagation();
+                    }}
+                    onTouchEnd={(e) => {
+                      e.stopPropagation();
                     }}
                   >
                     <svg
@@ -2105,12 +2144,30 @@ export default function PortfolioPageV2() {
                       className="modal-carousel-nav prev"
                       aria-label="Previous screenshot"
                       onClick={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
+                        const scrollEl = document.getElementById("modalDynamicContent");
+                        const curScroll = scrollEl ? scrollEl.scrollTop : 0;
                         setActiveSlideIndex((prev) =>
                           prev > 0
                             ? prev - 1
                             : activeProject.carouselImages.length - 1
                         );
+                        if (scrollEl && !isFullscreenViewer) {
+                          requestAnimationFrame(() => {
+                            if (scrollEl) scrollEl.scrollTop = curScroll;
+                          });
+                        }
+                      }}
+                      onPointerDown={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      onTouchStart={(e) => {
+                        e.stopPropagation();
+                      }}
+                      onTouchEnd={(e) => {
+                        e.stopPropagation();
                       }}
                     >
                       <svg
@@ -2131,12 +2188,30 @@ export default function PortfolioPageV2() {
                       className="modal-carousel-nav next"
                       aria-label="Next screenshot"
                       onClick={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
+                        const scrollEl = document.getElementById("modalDynamicContent");
+                        const curScroll = scrollEl ? scrollEl.scrollTop : 0;
                         setActiveSlideIndex((prev) =>
                           prev < activeProject.carouselImages.length - 1
                             ? prev + 1
                             : 0
                         );
+                        if (scrollEl && !isFullscreenViewer) {
+                          requestAnimationFrame(() => {
+                            if (scrollEl) scrollEl.scrollTop = curScroll;
+                          });
+                        }
+                      }}
+                      onPointerDown={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      onTouchStart={(e) => {
+                        e.stopPropagation();
+                      }}
+                      onTouchEnd={(e) => {
+                        e.stopPropagation();
                       }}
                     >
                       <svg
@@ -2276,7 +2351,21 @@ export default function PortfolioPageV2() {
               type="button"
               className="modal-close"
               aria-label="Close About Me dialog"
-              onClick={() => setIsAboutModalOpen(false)}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsAboutModalOpen(false);
+              }}
+              onPointerDown={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+              onTouchStart={(e) => {
+                e.stopPropagation();
+              }}
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+              }}
             >
               &times;
             </button>
@@ -2331,16 +2420,6 @@ export default function PortfolioPageV2() {
       </div>
     </div>
     )}
-
-      {/* ═══════════ VERSION SWITCHER DOCK ═══════════ */}
-      <aside className="version-switcher" aria-label="Version switcher">
-        <Link href="/v1" className="version-pill">
-          V1 (Original)
-        </Link>
-        <Link href="/" className="version-pill active">
-          V2 (Active)
-        </Link>
-      </aside>
     </>
   );
 }
