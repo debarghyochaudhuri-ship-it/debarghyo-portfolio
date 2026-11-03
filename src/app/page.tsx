@@ -730,16 +730,58 @@ export default function PortfolioPage() {
     const video = videoRef.current;
     if (!video) return;
 
+    // Enforce iPad / iOS Safari inline autoplay prerequisites
     video.defaultMuted = true;
     video.muted = true;
     video.playsInline = true;
     video.loop = false;
-    video.playbackRate = 1.0;
-    video.play().catch(() => {});
+    video.setAttribute("playsinline", "true");
+    video.setAttribute("webkit-playsinline", "true");
+    video.setAttribute("muted", "");
 
     let blurTriggered = false;
     let animId: number;
     let lastAppliedRate = 1.0;
+    let interactionListenerAttached = false;
+
+    const cleanupInteractionListeners = () => {
+      if (interactionListenerAttached) {
+        window.removeEventListener("touchstart", onFirstInteraction);
+        window.removeEventListener("scroll", onFirstInteraction);
+        window.removeEventListener("pointerdown", onFirstInteraction);
+        interactionListenerAttached = false;
+      }
+    };
+
+    const onFirstInteraction = () => {
+      cleanupInteractionListeners();
+      if (video && video.paused) {
+        video.play().catch(() => {});
+      }
+    };
+
+    const tryPlay = () => {
+      if (!video || !video.paused) return;
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Fallback for iPad low-power mode or strict autoplay restrictions:
+          // Resume on user's first touch/scroll gesture (guaranteed single registration)
+          if (!interactionListenerAttached) {
+            interactionListenerAttached = true;
+            window.addEventListener("touchstart", onFirstInteraction, { passive: true });
+            window.addEventListener("scroll", onFirstInteraction, { passive: true });
+            window.addEventListener("pointerdown", onFirstInteraction, { passive: true });
+          }
+        });
+      }
+    };
+
+    if (video.readyState >= 2) {
+      tryPlay();
+    } else {
+      video.addEventListener("canplay", tryPlay, { once: true });
+    }
 
     const checkSettle = () => {
       if (!video) return;
@@ -803,6 +845,8 @@ export default function PortfolioPage() {
 
     return () => {
       cancelAnimationFrame(animId);
+      cleanupInteractionListeners();
+      video.removeEventListener("canplay", tryPlay);
       video.removeEventListener("play", onPlay);
       video.removeEventListener("timeupdate", onTimeUpdate);
       video.removeEventListener("ended", onEnded);
@@ -1396,6 +1440,7 @@ export default function PortfolioPage() {
               autoPlay
               muted
               playsInline
+              {...({ "webkit-playsinline": "true" } as Record<string, string>)}
               poster="/images/hero-cinematic.png"
               preload="auto"
               disablePictureInPicture

@@ -1668,7 +1668,9 @@
         }
 
         @media (hover: none) {
-            .modal-carousel-nav:hover,
+            .modal-carousel-nav:hover {
+                transform: translateY(-50%);
+            }
             .modal-carousel-expand:hover,
             .modal-close:hover {
                 transform: none;
@@ -2901,18 +2903,24 @@
    ═══════════════════════════════════════════ */
 .v2-experience-section {
     background: transparent;
-    padding: 60px 32px 100px;
+    padding: 88px 32px 56px;
     position: relative;
     z-index: 5;
 }
 
+#experience.v2-experience-section {
+    padding-top: 88px;
+    padding-bottom: 56px;
+}
+
 #education.v2-experience-section {
-    padding-top: 60px;
+    padding-top: 56px;
+    padding-bottom: 56px;
 }
 
 .v2-experience-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 48px;
 }
 
 .v2-experience-title {
@@ -3156,7 +3164,7 @@
    ═══════════════════════════════════════════ */
 .v2-stacks-section {
     background: transparent;
-    padding: 80px 32px 100px;
+    padding: 56px 32px 56px;
     position: relative;
     z-index: 5;
     text-align: center;
@@ -3175,7 +3183,7 @@
     line-height: 1.12;
     color: #ffffff;
     letter-spacing: -0.04em;
-    margin-bottom: 40px;
+    margin-bottom: 48px;
 }
 
 /* Horizontal Tech Stacks Strip */
@@ -3184,8 +3192,8 @@
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 14px;
-    margin-bottom: 84px;
+    gap: 16px 14px;
+    margin-bottom: 72px;
     max-width: 1080px;
     margin-left: auto;
     margin-right: auto;
@@ -3231,11 +3239,11 @@
 /* Skills Cloud */
 .v2-skills-cloud {
     max-width: 1020px;
-    margin: 0 auto 64px;
+    margin: 0 auto 56px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 12px 14px;
+    gap: 14px 14px;
 }
 
 .v2-skill-pill {
@@ -3310,7 +3318,7 @@
    ═══════════════════════════════════════════ */
 .v2-contact-section {
     background: transparent;
-    padding: 120px 48px 80px;
+    padding: 56px 48px 80px;
     position: relative;
     z-index: 5;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
@@ -3328,7 +3336,7 @@
     line-height: 1.12;
     letter-spacing: -0.04em;
     color: #ffffff;
-    margin-bottom: 40px;
+    margin-bottom: 48px;
     text-transform: none;
 }
 
@@ -3815,13 +3823,18 @@
 
     /* Fold 3: Frosted Experience */
     .v2-experience-section {
-        padding: 60px 20px 70px;
+        padding: 64px 20px 44px;
+    }
+    #experience.v2-experience-section {
+        padding-top: 64px;
+        padding-bottom: 44px;
     }
     #education.v2-experience-section {
-        padding-top: 40px;
+        padding-top: 44px;
+        padding-bottom: 44px;
     }
     .v2-experience-header {
-        margin-bottom: 40px;
+        margin-bottom: 38px;
     }
     .v2-experience-title {
         font-size: clamp(2.2rem, 4.5vw, 2.6rem);
@@ -3883,32 +3896,32 @@
 
     /* Fold 4: Tech Stacks & Skills */
     .v2-stacks-section {
-        padding: 60px 20px 70px;
+        padding: 44px 20px 44px;
     }
     .v2-stacks-title {
         font-size: clamp(2.2rem, 4.5vw, 2.6rem);
         letter-spacing: -0.04em;
-        margin-bottom: 30px;
+        margin-bottom: 38px;
     }
     .v2-tech-strip {
-        gap: 10px;
-        margin-bottom: 60px;
+        gap: 14px 10px;
+        margin-bottom: 56px;
         max-width: 720px;
     }
     .v2-skills-cloud {
-        gap: 10px 12px;
-        margin-bottom: 50px;
+        gap: 13px 10px;
+        margin-bottom: 44px;
         max-width: 720px;
     }
 
     /* Fold 5: Contact */
     .v2-contact-section {
-        padding: 80px 24px 80px;
+        padding: 44px 24px 64px;
     }
     .v2-contact-bigtitle {
         font-size: clamp(2.2rem, 4.5vw, 2.6rem);
         letter-spacing: -0.04em;
-        margin-bottom: 36px;
+        margin-bottom: 38px;
     }
     .v2-contact-row {
         padding: 20px 16px;
@@ -4257,13 +4270,18 @@
 
     /* Fold 3: Frosted Experience */
     .v2-experience-section {
-        padding: 48px 12px 50px;
+        padding: 56px 12px 36px;
+    }
+    #experience.v2-experience-section {
+        padding-top: 56px;
+        padding-bottom: 36px;
     }
     #education.v2-experience-section {
-        padding-top: 24px;
+        padding-top: 36px;
+        padding-bottom: 36px;
     }
     .v2-experience-header {
-        margin-bottom: 24px;
+        margin-bottom: 34px;
     }
     .v2-experience-title {
         font-size: clamp(1.9rem, 6.8vw, 2.35rem);
@@ -4276,7 +4294,7 @@
     .v2-timeline-row {
         grid-template-columns: 36px 1fr 20px;
         gap: 4px 10px;
-        padding: 16px 0;
+        padding: 18px 0;
     }
     .v2-tl-logo {
         width: 36px;
@@ -4316,24 +4334,24 @@
 
     /* Fold 4: Tech Stacks & Skills */
     .v2-stacks-section {
-        padding: 48px 12px 56px;
+        padding: 36px 14px 36px;
     }
     .v2-stacks-title {
         font-size: clamp(1.9rem, 6.8vw, 2.35rem);
         letter-spacing: -0.04em;
-        margin-bottom: 20px;
+        margin-bottom: 32px;
     }
     .v2-tech-strip {
-        gap: 8px;
-        margin-bottom: 36px;
+        gap: 13px 8px;
+        margin-bottom: 48px;
     }
     .v2-tech-card {
         padding: 7px 13px;
         font-size: 12px;
     }
     .v2-skills-cloud {
-        gap: 7px 8px;
-        margin-bottom: 32px;
+        gap: 12px 8px;
+        margin-bottom: 36px;
     }
     .v2-skill-pill {
         padding: 7px 13px;
@@ -4341,23 +4359,24 @@
     }
     .v2-stacks-callout {
         font-size: 16px;
+        margin-top: 8px;
     }
 
     /* Fold 5: Contact */
     .v2-contact-section {
-        padding: 48px 14px 76px;
+        padding: 36px 14px 64px;
     }
     .v2-contact-bigtitle {
         font-size: clamp(1.9rem, 6.8vw, 2.35rem);
         letter-spacing: -0.04em;
-        margin-bottom: 24px;
+        margin-bottom: 34px;
     }
     .v2-contact-list {
-        margin-bottom: 36px;
+        margin-bottom: 40px;
     }
     .v2-contact-row {
-        padding: 14px 10px;
-        gap: 10px;
+        padding: 16px 12px;
+        gap: 12px;
     }
     .v2-contact-circle-icon {
         width: 34px;
