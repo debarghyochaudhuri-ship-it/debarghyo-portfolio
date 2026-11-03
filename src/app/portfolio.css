@@ -2513,7 +2513,7 @@
 /* Stacking Project Cards Section: Transparent over blurred diary canvas */
 .v2-stacking-projects {
     background: transparent;
-    padding: 60px 32px 340px;
+    padding: 60px 32px 80px;
     position: relative;
     z-index: 10;
 }
@@ -2526,7 +2526,8 @@
 }
 
 .v2-card-stack-spacer {
-    height: 100vh;
+    display: none;
+    height: 0;
     width: 100%;
     pointer-events: none;
     visibility: hidden;
@@ -2863,7 +2864,7 @@
    ═══════════════════════════════════════════ */
 .v2-experience-section {
     background: transparent;
-    padding: 100px 32px 130px;
+    padding: 80px 32px 100px;
     position: relative;
     z-index: 5;
 }
@@ -3114,7 +3115,7 @@
    ═══════════════════════════════════════════ */
 .v2-stacks-section {
     background: transparent;
-    padding: 110px 32px 120px;
+    padding: 80px 32px 100px;
     position: relative;
     z-index: 5;
     text-align: center;
@@ -3590,7 +3591,7 @@
     }
     /* Fold 2: Project Cards - Tablet Stacking */
     .v2-stacking-projects {
-        padding: 30px 20px 260px;
+        padding: 30px 20px 50px;
     }
     .v2-card-stack {
         display: block;
@@ -3615,7 +3616,7 @@
         transform-origin: center top;
     }
     .v2-project-card:last-child {
-        margin-bottom: max(25vh, 160px);
+        margin-bottom: 0;
     }
     .v2-card-left {
         display: flex;
@@ -3766,7 +3767,7 @@
 
     /* Fold 3: Frosted Experience */
     .v2-experience-section {
-        padding: 70px 20px 80px;
+        padding: 60px 20px 70px;
     }
     .v2-experience-header {
         margin-bottom: 40px;
@@ -3831,7 +3832,7 @@
 
     /* Fold 4: Tech Stacks & Skills */
     .v2-stacks-section {
-        padding: 70px 20px 80px;
+        padding: 60px 20px 70px;
     }
     .v2-stacks-title {
         font-size: clamp(2.2rem, 4.5vw, 2.6rem);
@@ -3994,7 +3995,7 @@
     }
     /* Fold 2: Project Cards - Mobile Stacking */
     .v2-stacking-projects {
-        padding: 14px 12px 220px;
+        padding: 14px 12px 36px;
     }
     .v2-card-stack {
         display: block;
@@ -4018,7 +4019,7 @@
         transform-origin: center top;
     }
     .v2-project-card:last-child {
-        margin-bottom: max(35vh, 220px);
+        margin-bottom: 0;
     }
     .v2-card-left {
         display: contents;
