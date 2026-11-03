@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 interface MetricItem {
   val: string;
@@ -712,6 +712,118 @@ const processSteps: ProcessStep[] = [
   },
 ];
 
+const HERO_ROTATING_PAIRS = [
+  { user: "user goals", business: "business goals" },
+  { user: "user needs", business: "business needs" },
+  { user: "user behaviour", business: "business metrics" },
+  { user: "user motivations", business: "business outcomes" },
+] as const;
+
+function HeroHeadlineRotator() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [phase, setPhase] = useState<"idle" | "exit" | "enter">("idle");
+  const currentIndexRef = useRef(0);
+
+  useEffect(() => {
+    // Respect prefers-reduced-motion: stay static on pair 0
+    if (typeof window !== "undefined") {
+      const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      if (mediaQuery.matches) {
+        return;
+      }
+    }
+
+    let cycleTimer: ReturnType<typeof setTimeout>;
+    let swapTimer: ReturnType<typeof setTimeout>;
+    let settleTimer: ReturnType<typeof setTimeout>;
+    let isMounted = true;
+
+    const scheduleNextCycle = () => {
+      cycleTimer = setTimeout(() => {
+        if (!isMounted) return;
+
+        // Pause cycle when document is in background to prevent tab throttle jumps
+        if (typeof document !== "undefined" && document.hidden) {
+          const onVisible = () => {
+            if (!document.hidden) {
+              document.removeEventListener("visibilitychange", onVisible);
+              if (isMounted) scheduleNextCycle();
+            }
+          };
+          document.addEventListener("visibilitychange", onVisible);
+          return;
+        }
+
+        // 1. Synchronized smooth glide-out of both gradient phrases
+        setPhase("exit");
+
+        // 2. At 220ms (fully transparent), swap phrases with natural width and begin glide-in
+        swapTimer = setTimeout(() => {
+          if (!isMounted) return;
+          const next = (currentIndexRef.current + 1) % HERO_ROTATING_PAIRS.length;
+          currentIndexRef.current = next;
+          setCurrentIndex(next);
+          setPhase("enter");
+
+          // 3. At 250ms glide-in completion, settle back to idle
+          settleTimer = setTimeout(() => {
+            if (!isMounted) return;
+            setPhase("idle");
+            scheduleNextCycle();
+          }, 250);
+        }, 220);
+      }, 3500);
+    };
+
+    scheduleNextCycle();
+
+    return () => {
+      isMounted = false;
+      clearTimeout(cycleTimer);
+      clearTimeout(swapTimer);
+      clearTimeout(settleTimer);
+    };
+  }, []);
+
+  const currentPair = HERO_ROTATING_PAIRS[currentIndex];
+
+  const phraseClass =
+    phase === "exit"
+      ? "v2-rotator-item-exit"
+      : phase === "enter"
+      ? "v2-rotator-item-enter"
+      : "v2-rotator-item-idle";
+
+  return (
+    <h1
+      className="v2-headline-main"
+      aria-label="Good design is all about solving user needs and business problems."
+    >
+      {/* Screen-reader single static announcement - no live region spam */}
+      <span className="sr-only">
+        Good design is all about solving user needs and business problems.
+      </span>
+
+      {/* Visual animated presentation */}
+      <span aria-hidden="true" className="v2-headline-visual">
+        <span className="v2-headline-lead">
+          Good design is all about solving
+        </span>{" "}
+        <span className="v2-headline-second-line">
+          <span className={`v2-headline-accent v2-rotator-phrase ${phraseClass}`}>
+            {currentPair.user}
+          </span>{" "}
+          <span className="v2-headline-static-and">and</span>{" "}
+          <span className={`v2-headline-accent v2-rotator-phrase ${phraseClass}`}>
+            {currentPair.business}
+          </span>
+          <span className="v2-headline-dot">.</span>
+        </span>
+      </span>
+    </h1>
+  );
+}
+
 export default function PortfolioPage() {
   const [activeModalIndex, setActiveModalIndex] = useState<number | null>(null);
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
@@ -762,6 +874,8 @@ export default function PortfolioPage() {
 
     const tryPlay = () => {
       if (!video || !video.paused) return;
+      video.muted = true;
+      video.defaultMuted = true;
       const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
@@ -777,11 +891,16 @@ export default function PortfolioPage() {
       }
     };
 
-    if (video.readyState >= 2) {
-      tryPlay();
-    } else {
-      video.addEventListener("canplay", tryPlay, { once: true });
-    }
+    // Attempt immediate inline playback on mount (initiates buffering in WebKit on iOS/iPadOS)
+    tryPlay();
+
+    // Also retry on loadedmetadata in case WebKit media pipeline needed metadata resolution
+    const onLoadedMetadata = () => {
+      if (video && video.paused) {
+        tryPlay();
+      }
+    };
+    video.addEventListener("loadedmetadata", onLoadedMetadata, { once: true });
 
     const checkSettle = () => {
       if (!video) return;
@@ -846,7 +965,7 @@ export default function PortfolioPage() {
     return () => {
       cancelAnimationFrame(animId);
       cleanupInteractionListeners();
-      video.removeEventListener("canplay", tryPlay);
+      video.removeEventListener("loadedmetadata", onLoadedMetadata);
       video.removeEventListener("play", onPlay);
       video.removeEventListener("timeupdate", onTimeUpdate);
       video.removeEventListener("ended", onEnded);
@@ -1437,6 +1556,7 @@ export default function PortfolioPage() {
             <video
               ref={videoRef}
               className="v2-scene-base-video"
+              src="/videos/hero-background.mp4"
               autoPlay
               muted
               playsInline
@@ -1477,11 +1597,7 @@ export default function PortfolioPage() {
 
             {/* Title, Pitch & CTAs Cohesive Group */}
             <div className="v2-hero-title">
-              <h1 className="v2-headline-main">
-                Good design is all about solving{" "}
-                <span className="v2-headline-accent">user needs</span> and{" "}
-                <span className="v2-nowrap"><span className="v2-headline-accent">business problems</span>.</span>
-              </h1>
+              <HeroHeadlineRotator />
 
               <p className="v2-hero-bio">
                 I design digital products that bring user needs and business goals together by focusing on simplifying complex workflows and creating intuitive experiences.
