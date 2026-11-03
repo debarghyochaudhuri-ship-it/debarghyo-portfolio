@@ -1911,7 +1911,7 @@
 
 
 /* ═══════════════════════════════════════════
-   VERSION 2 CINEMATIC EDITORIAL HERO & CAMERA CANVAS
+   CINEMATIC EDITORIAL HERO & CAMERA CANVAS
    ═══════════════════════════════════════════ */
 .v2-camera-canvas-wrapper {
     position: fixed;
@@ -2142,6 +2142,14 @@
     margin-bottom: 30px;
 }
 
+.v2-hero-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    width: auto;
+}
+
 .v2-hero-link-secondary {
     font-family: var(--font-primary);
     font-weight: 500;
@@ -2323,7 +2331,7 @@
 
 
 /* ═══════════════════════════════════════════
-   VERSION 2 FOLD 2: DESIGN PROCESS (TRANSPARENT ON BLURRED DIARY) + STACKING PROJECTS
+   FOLD 2: DESIGN PROCESS (TRANSPARENT ON BLURRED DIARY) + STACKING PROJECTS
    ═══════════════════════════════════════════ */
 .v2-fold2-wrapper {
     position: relative;
@@ -2510,35 +2518,50 @@
     display: none !important;
 }
 
-/* Stacking Project Cards Section: Transparent over blurred diary canvas */
+/* Stacking Project Cards Section: Sticky Stage Wrapper Architecture */
 .v2-stacking-projects {
     background: transparent;
-    padding: 60px 32px 80px;
     position: relative;
     z-index: 10;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.v2-card-stage {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 580px;
+    height: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: visible;
+    box-sizing: border-box;
+    pointer-events: none;
 }
 
 .v2-card-stack {
     position: relative;
     max-width: 1320px;
+    width: calc(100% - 64px);
     margin: 0 auto;
-    display: block;
+    height: 100%;
+    pointer-events: auto;
 }
 
-.v2-card-stack-spacer {
-    display: none;
-    height: 0;
-    width: 100%;
-    pointer-events: none;
-    visibility: hidden;
-}
-
-/* Sticky Overlap Stacking Project Card */
+/* Overlap Stacking Project Card inside Sticky Stage */
 .v2-project-card {
-    position: sticky;
+    position: absolute;
     top: calc(var(--stack-base-top, 60px) + var(--card-index, 0) * var(--stack-step-offset, 50px));
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin: 0 auto;
     border-radius: 28px;
-    margin-bottom: 96px;
     padding: 32px 44px 32px 44px;
     background-color: #0B0D10;
     border: 1px solid rgba(255, 255, 255, 0.10);
@@ -2555,13 +2578,27 @@
     transform-origin: center top;
 }
 
-.v2-project-card:last-child {
-    margin-bottom: 0;
-}
-
 .v2-project-card:hover {
     border-color: rgba(255, 255, 255, 0.20);
     box-shadow: 0 -4px 28px rgba(0, 0, 0, 0.65), 0 28px 70px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Compact padding for shorter desktop laptop viewports (e.g. 1366x768 or 1440x900 with browser bars) */
+@media (min-width: 1025px) and (max-height: 780px) {
+    .v2-project-card {
+        padding: 22px 36px;
+        gap: 24px;
+    }
+    .v2-card-section-group {
+        margin-bottom: 6px;
+    }
+    .v2-card-narrative-text {
+        font-size: 13.5px;
+        line-height: 1.35;
+    }
+    .v2-mockup-wrapper img {
+        max-height: 420px;
+    }
 }
 
 .v2-card-left {
@@ -2860,11 +2897,11 @@
 
 
 /* ═══════════════════════════════════════════
-   VERSION 2 FOLD 3: FROSTED GLASS EXPERIENCE TIMELINE
+   FOLD 3: FROSTED GLASS EXPERIENCE TIMELINE
    ═══════════════════════════════════════════ */
 .v2-experience-section {
     background: transparent;
-    padding: 80px 32px 100px;
+    padding: 60px 32px 100px;
     position: relative;
     z-index: 5;
 }
@@ -3115,7 +3152,7 @@
 
 
 /* ═══════════════════════════════════════════
-   VERSION 2 FOLD 4: TECH STACKS & SKILLS SECTION
+   FOLD 4: TECH STACKS & SKILLS SECTION
    ═══════════════════════════════════════════ */
 .v2-stacks-section {
     background: transparent;
@@ -3269,7 +3306,7 @@
 
 
 /* ═══════════════════════════════════════════
-   VERSION 2 FOLD 5: MINIMALIST HIGH-IMPACT CONTACT & FOOTER
+   FOLD 5: MINIMALIST HIGH-IMPACT CONTACT & FOOTER
    ═══════════════════════════════════════════ */
 .v2-contact-section {
     background: transparent;
@@ -3593,16 +3630,27 @@
     .v2-process-arrow {
         display: none;
     }
-    /* Fold 2: Project Cards - Tablet Stacking */
+    /* Fold 2: Project Cards - Tablet Stacking (Sticky Stage Wrapper) */
     .v2-stacking-projects {
-        padding: 30px 20px 50px;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+    }
+    .v2-card-stage {
+        min-height: 520px;
+        height: auto;
     }
     .v2-card-stack {
-        display: block;
+        width: calc(100% - 40px);
+        margin: 0 auto;
     }
     .v2-project-card {
-        position: sticky;
+        position: absolute;
         top: 54px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        margin: 0 auto;
         height: auto;
         min-height: 0;
         max-height: none;
@@ -3612,15 +3660,11 @@
         align-items: center;
         padding: 24px 28px;
         border-radius: 24px;
-        margin-bottom: max(25vh, 160px);
         background-color: #0B0D10 !important;
         border: 1px solid rgba(255, 255, 255, 0.10);
         box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5), 0 20px 52px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.10);
         will-change: transform, filter, opacity;
         transform-origin: center top;
-    }
-    .v2-project-card:last-child {
-        margin-bottom: 0;
     }
     .v2-card-left {
         display: flex;
@@ -3872,9 +3916,9 @@
 }
 
 /* ═══════════════════════════════════════════
-   UNIFIED RESPONSIVE: MOBILE (max-width: 640px)
+   UNIFIED RESPONSIVE: MOBILE (max-width: 768px)
    ═══════════════════════════════════════════ */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
     /* Navbar: Logo on left, Contact action on right */
     .navbar {
         padding: 12px 16px;
@@ -4000,33 +4044,40 @@
         max-width: 100%;
         line-height: 1.2;
     }
-    /* Fold 2: Project Cards - Mobile Stacking */
+    /* Fold 2: Project Cards - Mobile Stacking (Sticky Stage Wrapper) */
     .v2-stacking-projects {
-        padding: 14px 12px 36px;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+    }
+    .v2-card-stage {
+        min-height: 520px;
+        height: auto;
     }
     .v2-card-stack {
-        display: block;
+        width: calc(100% - 24px);
+        margin: 0 auto;
     }
     .v2-project-card {
-        position: sticky;
+        position: absolute;
         top: 48px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        margin: 0 auto;
         display: flex;
         flex-direction: column;
         height: auto;
-        min-height: min(640px, calc(100dvh - 64px));
+        min-height: 0;
         max-height: none;
         padding: 18px 16px 20px 16px;
         border-radius: 20px;
         gap: 14px;
-        margin-bottom: max(35vh, 220px);
         background-color: #0B0D10 !important;
         border: 1px solid rgba(255, 255, 255, 0.10);
         box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.6), 0 16px 44px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
         will-change: transform, filter, opacity;
         transform-origin: center top;
-    }
-    .v2-project-card:last-child {
-        margin-bottom: 0;
     }
     .v2-card-left {
         display: contents;
@@ -4166,16 +4217,6 @@
     }
     .v2-role-tagline {
         font-size: 10.5px;
-    }
-    .v2-hero-link-secondary {
-        justify-content: center;
-        text-align: center;
-        padding: 10px 14px;
-        font-size: 13.5px;
-        color: rgba(255, 255, 255, 0.85);
-    }
-    .v2-role-tagline {
-        font-size: 10.5px;
         line-height: 1.35;
     }
 
@@ -4204,7 +4245,11 @@
         padding: 12px 24px !important;
         flex: none !important;
     }
+    .v2-hero-actions .v2-btn-readstudy {
+        order: 1 !important;
+    }
     .v2-hero-actions .v2-hero-link-secondary {
+        order: 2 !important;
         background: rgba(255, 255, 255, 0.08) !important;
         border: 1px solid rgba(255, 255, 255, 0.15) !important;
         color: #ffffff !important;

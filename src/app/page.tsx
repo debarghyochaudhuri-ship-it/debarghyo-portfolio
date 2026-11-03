@@ -907,6 +907,15 @@ export default function PortfolioPage() {
     let ticking = false;
 
     const updateStacking = () => {
+      const track = document.getElementById("projects-track");
+      if (!track) return;
+
+      const cards = Array.from(
+        document.querySelectorAll<HTMLElement>(".v2-project-card")
+      );
+      const N = cards.length;
+      if (N === 0) return;
+
       const isMobile = window.innerWidth <= 767;
       const isTouchDevice =
         typeof navigator !== "undefined" &&
@@ -915,39 +924,133 @@ export default function PortfolioPage() {
       const isTablet =
         !isMobile &&
         (window.innerWidth <= 1024 ||
-          (isTouchDevice && window.innerWidth <= 1366) ||
-          (window.innerWidth <= 1366 && window.innerHeight <= 920));
-      const baseTop = isMobile ? 48 : isTablet ? 54 : 60;
-      const stepOffset = isMobile ? 0 : isTablet ? 0 : 50;
-      const travelDist = isMobile ? 180 : 250;
-      const N = cards.length;
+          (isTouchDevice && window.innerWidth <= 1366));
 
-      // 1. Calculate how much each incoming card j has moved upward to overlap card j-1 (p[j] from 0.0 to 1.0)
-      const p = new Array(N).fill(0);
+      const vh = window.innerHeight || 800;
+      const lastCard = cards[N - 1];
+      const lastCardHeight = lastCard ? lastCard.offsetHeight : 540;
 
-      for (let j = 1; j < N; j++) {
-        const card = cards[j];
-        const rect = card.getBoundingClientRect();
-        const targetTop = baseTop + j * stepOffset;
-        p[j] = Math.min(
-          1.0,
-          Math.max(0.0, (targetTop + travelDist - rect.top) / travelDist)
-        );
+      // 1. Viewport-Adaptive Desktop Stacking Offsets
+      let baseTop = 60;
+      let stepOffset = 50;
+
+      if (isMobile) {
+        baseTop = 48;
+        stepOffset = 0;
+      } else if (isTablet) {
+        // Tablet: proportioned so card sits comfortably with ample breathing room
+        const cardH = lastCard ? lastCard.offsetHeight : 500;
+        baseTop = Math.max(54, Math.min(100, Math.round((vh - cardH) * 0.22)));
+        stepOffset = 0;
+      } else {
+        // Desktop: ensure Card 5 bottom has at least 32px clearance from vh
+        // Max allowed targetTop for Card 5:
+        const maxTopLast = Math.max(160, vh - lastCardHeight - 32);
+        if (maxTopLast < 310) {
+          // Shorter desktop screen: adapt stepOffset and baseTop dynamically so CTAs never cut off
+          stepOffset = Math.max(34, Math.min(48, Math.floor((maxTopLast - 44) / (N - 1))));
+          baseTop = Math.max(38, Math.min(56, maxTopLast - (N - 1) * stepOffset));
+        } else {
+          baseTop = 60;
+          stepOffset = 50;
+        }
       }
 
-      if (isMobile || isTablet) {
-        // Mobile & Tablet: all cards align identically at baseTop.
-        // When card k+1 reaches near full overlap (p[k+1] >= 0.98), card k is cleanly hidden
-        // so no bottom edge, border, or text peeks out behind the active card.
-        cards.forEach((card, k) => {
-          card.style.top = `${baseTop}px`;
+      const stack = track.querySelector<HTMLElement>(".v2-card-stack");
+      if (stack) {
+        stack.style.setProperty("--stack-base-top", `${baseTop}px`);
+        stack.style.setProperty("--stack-step-offset", `${stepOffset}px`);
+      }
+
+      // 2. Target Tops for Each Card
+      const targetTops = cards.map((card, k) => {
+        const cardH = card.offsetHeight || (isMobile ? 580 : 540);
+        if (isMobile) {
+          if (cardH > vh - 64) {
+            // Bottom-aware mobile positioning: ensures CTAs and card bottom are fully on-screen
+            return Math.max(-120, vh - cardH - 18);
+          }
+          return 48;
+        } else if (isTablet) {
+          return baseTop;
+        } else {
+          return baseTop + k * stepOffset;
+        }
+      });
+
+      // 3. Dynamic Stack Height & Scroll-Track Dimensions
+      // Calculate the bottom-most pixel of the card stack:
+      let maxCardBottom = 0;
+      cards.forEach((card, k) => {
+        const h = card.offsetHeight || (isMobile ? 580 : 540);
+        const b = targetTops[k] + h;
+        if (b > maxCardBottom) maxCardBottom = b;
+      });
+
+      const stage = track.querySelector<HTMLElement>(".v2-card-stage");
+      const requiredStageHeight = Math.max(isMobile ? 520 : 580, maxCardBottom + (isMobile ? 16 : 24));
+      if (stage && stage.style.height !== `${requiredStageHeight}px`) {
+        stage.style.height = `${requiredStageHeight}px`;
+      }
+
+      const arrivalDistPerCard = isMobile
+        ? Math.min(400, Math.max(280, Math.round(vh * 0.65)))
+        : isTablet
+        ? Math.min(380, Math.max(260, Math.round(vh * 0.6)))
+        : Math.min(420, Math.max(300, Math.round(vh * 0.52)));
+      const totalArrivalDist = (N - 1) * arrivalDistPerCard;
+      const restDist = isMobile ? 80 : isTablet ? 100 : 120;
+
+      // Track height = stage height + arrival distance + rest distance
+      // Eliminates the dead zone and allows Experience to follow directly at a natural gap!
+      const requiredTrackHeight = requiredStageHeight + totalArrivalDist + restDist;
+      if (track.style.height !== `${requiredTrackHeight}px`) {
+        track.style.height = `${requiredTrackHeight}px`;
+      }
+
+      // 4. Normalized Progress for Each Card
+      const trackRect = track.getBoundingClientRect();
+      const scrollIntoTrack = -trackRect.top;
+
+      const p = new Array(N).fill(0);
+      p[0] = 1.0; // Card 0 (Export Comments) is pre-seated
+      for (let j = 1; j < N; j++) {
+        const cardStart = (j - 1) * arrivalDistPerCard;
+        const cardEnd = j * arrivalDistPerCard;
+        if (scrollIntoTrack <= cardStart) {
+          p[j] = 0.0;
+        } else if (scrollIntoTrack >= cardEnd) {
+          p[j] = 1.0;
+        } else {
+          p[j] = (scrollIntoTrack - cardStart) / arrivalDistPerCard;
+        }
+      }
+
+      // 5. Apply Coordinated Transforms & Depth Attenuation
+      cards.forEach((card, k) => {
+        card.style.top = `${targetTops[k]}px`;
+        const pj = p[k];
+        const entryTravel = vh - targetTops[k] + 40;
+        const currentOffsetY = k === 0 ? 0 : (1.0 - pj) * entryTravel;
+
+        let stackDepth = 0;
+        for (let j = k + 1; j < N; j++) {
+          stackDepth += p[j];
+        }
+
+        if (isMobile || isTablet) {
           const isCovered = k < N - 1 && p[k + 1] >= 0.98;
-          card.style.visibility = isCovered ? "hidden" : "visible";
+          const isUpcoming = k > 0 && pj <= 0.001;
+          card.style.visibility = (isCovered || isUpcoming) ? "hidden" : "visible";
           card.style.opacity = isCovered ? "0" : "1";
-          card.style.transform = "none";
-          card.style.filter = "none";
           card.style.pointerEvents = isCovered ? "none" : "auto";
           card.style.borderColor = "rgba(255, 255, 255, 0.10)";
+          card.style.filter = "none";
+          if (currentOffsetY !== 0) {
+            card.style.transform = `translate3d(0, ${currentOffsetY.toFixed(1)}px, 0)`;
+          } else {
+            card.style.transform = "none";
+          }
 
           const titleEl = card.querySelector<HTMLElement>(".v2-project-bigtitle");
           const leftEl = card.querySelector<HTMLElement>(".v2-card-left");
@@ -965,27 +1068,10 @@ export default function PortfolioPage() {
             mockup.style.opacity = isCovered ? "0" : "1";
             mockup.style.transform = "none";
           }
-        });
-        return;
-      } else {
-        // Desktop: PRESERVE EXACT EXISTING BEHAVIOUR COMPLETELY
-        cards.forEach((card, k) => {
-          card.style.top = "";
-          let stackDepth = 0;
-          for (let j = k + 1; j < N; j++) {
-            stackDepth += p[j];
-          }
-
-          card.style.visibility = "visible";
-
-          // Refined depth attenuation matching reference image:
-          // Headers of all stacked cards remain crisp, legible, and visible
-          // - Active card (depth 0): 100% brightness, 100% opacity
-          // - 1 card behind (depth 1): ~86% brightness, ~88% opacity
-          // - 2 cards behind (depth 2): ~74% brightness, ~76% opacity
-          // - 3 cards behind (depth 3): ~62% brightness, ~65% opacity
-          // - 4 cards behind (depth 4): ~52% brightness, ~55% opacity
-          // - 5 cards behind (depth 5): ~44% brightness, ~48% opacity (clear legible silver-gray)
+        } else {
+          // Desktop: Progressive Staggered Overlap with Stepped Depth Attenuation
+          const isUpcoming = k > 0 && pj <= 0.001;
+          card.style.visibility = isUpcoming ? "hidden" : "visible";
           let opacity = 1.0;
           let brightness = 1.0;
           let titleOpacity = 1.0;
@@ -1027,13 +1113,15 @@ export default function PortfolioPage() {
             scale = 0.958 - d * 0.006;
           }
 
-          // Keep card background 100% opaque to prevent bleed-through while darkening surface
           card.style.opacity = "1";
           card.style.filter = `brightness(${brightness.toFixed(3)})`;
-          card.style.transform = `scale(${scale.toFixed(4)})`;
+          if (currentOffsetY !== 0) {
+            card.style.transform = `translate3d(0, ${currentOffsetY.toFixed(1)}px, 0) scale(${scale.toFixed(4)})`;
+          } else {
+            card.style.transform = `scale(${scale.toFixed(4)})`;
+          }
           card.style.borderColor = `rgba(255, 255, 255, ${(0.12 * Math.max(0.3, opacity)).toFixed(3)})`;
 
-          // Apply progressive text and graphic opacity to inner card content
           const titleEl = card.querySelector<HTMLElement>(".v2-project-bigtitle");
           const leftEl = card.querySelector<HTMLElement>(".v2-card-left");
           const mockup = card.querySelector<HTMLElement>(".v2-mockup-wrapper");
@@ -1048,19 +1136,20 @@ export default function PortfolioPage() {
           }
           if (mockup) {
             mockup.style.opacity = opacity.toFixed(3);
-            // Subtle floating parallax for the product mockup inside the card
-            const rect = card.getBoundingClientRect();
-            const vh = window.innerHeight || 900;
-            const cardCenter = rect.top + rect.height / 2;
-            const dist = (cardCenter - vh / 2) / vh;
-            const offset = Math.max(-20, Math.min(20, dist * -24));
-            mockup.style.transform = `translate3d(0, ${offset.toFixed(1)}px, 0)`;
+            if (stackDepth > 0) {
+              mockup.style.transform = "none";
+            } else {
+              const rect = card.getBoundingClientRect();
+              const cardCenter = rect.top + rect.height / 2;
+              const dist = (cardCenter - vh / 2) / vh;
+              const offset = Math.max(-20, Math.min(20, dist * -24));
+              mockup.style.transform = `translate3d(0, ${offset.toFixed(1)}px, 0)`;
+            }
           }
 
-          // Interactive accessibility: disable clicks on cards buried behind
           card.style.pointerEvents = stackDepth >= 0.85 ? "none" : "auto";
-        });
-      }
+        }
+      });
     };
 
     const onScroll = () => {
@@ -1073,6 +1162,21 @@ export default function PortfolioPage() {
       }
     };
 
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(() => {
+        updateStacking();
+      });
+      cards.forEach((c) => {
+      ro?.observe(c);
+      c.querySelectorAll<HTMLImageElement>("img").forEach((img) => {
+        if (!img.complete) {
+          img.addEventListener("load", () => updateStacking(), { once: true });
+        }
+      });
+    });
+    }
+
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll, { passive: true });
     window.addEventListener("touchmove", onScroll, { passive: true });
@@ -1080,6 +1184,7 @@ export default function PortfolioPage() {
     updateStacking();
 
     return () => {
+      ro?.disconnect();
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       window.removeEventListener("touchmove", onScroll);
@@ -1255,7 +1360,7 @@ export default function PortfolioPage() {
         Skip to selected work
       </a>
 
-      {/* ═══════════ NAVBAR (VERSION 2) ═══════════ */}
+      {/* ═══════════ NAVBAR ═══════════ */}
       <nav className="navbar" id="navbar" aria-label="Main Navigation">
         <div className="v2-nav-logo">
           DEBARGHYO<span className="slash">/</span>BUILDS
@@ -1312,7 +1417,7 @@ export default function PortfolioPage() {
       </div>
 
       <main id="main-content">
-        {/* ═══════════ HERO (VERSION 2 CINEMATIC EDITORIAL FOLD) ═══════════ */}
+        {/* ═══════════ HERO FOLD ═══════════ */}
         <section className="v2-hero" id="hero" aria-label="Introduction">
           <div className="v2-hero-overlay" aria-hidden="true" />
 
@@ -1459,9 +1564,10 @@ export default function PortfolioPage() {
           </section>
 
           {/* SECTION 2B: SELECTED PROJECTS */}
-          <section className="v2-stacking-projects" aria-label="Selected Projects">
-            <div className="v2-card-stack">
-              {projects.map((project, idx) => (
+          <section className="v2-stacking-projects" id="projects-track" aria-label="Selected Projects">
+            <div className="v2-card-stage">
+              <div className="v2-card-stack">
+                {projects.map((project, idx) => (
                 <article
                   key={project.id}
                   className={`v2-project-card ${project.bgColorClass}`}
@@ -1573,8 +1679,7 @@ export default function PortfolioPage() {
                   </div>
                 </article>
               ))}
-              {/* End-of-stack spacer provides in-flow scroll distance so the final card locks into its sticky stack position */}
-              <div className="v2-card-stack-spacer" aria-hidden="true" />
+              </div>
             </div>
           </section>
         </div>
