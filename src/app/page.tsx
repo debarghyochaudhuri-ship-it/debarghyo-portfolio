@@ -1744,7 +1744,6 @@ export default function PortfolioPage() {
           className="v2-experience-section"
           id="education"
           aria-label="Education"
-          style={{ paddingTop: "60px" }}
         >
           <div className="v2-experience-header">
             <h2 className="v2-experience-title">

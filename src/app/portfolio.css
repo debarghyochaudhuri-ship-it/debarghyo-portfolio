@@ -2869,6 +2869,10 @@
     z-index: 5;
 }
 
+#education.v2-experience-section {
+    padding-top: 60px;
+}
+
 .v2-experience-header {
     text-align: center;
     margin-bottom: 40px;
@@ -3769,6 +3773,9 @@
     .v2-experience-section {
         padding: 60px 20px 70px;
     }
+    #education.v2-experience-section {
+        padding-top: 40px;
+    }
     .v2-experience-header {
         margin-bottom: 40px;
     }
@@ -4205,7 +4212,10 @@
 
     /* Fold 3: Frosted Experience */
     .v2-experience-section {
-        padding: 48px 12px 56px;
+        padding: 48px 12px 50px;
+    }
+    #education.v2-experience-section {
+        padding-top: 24px;
     }
     .v2-experience-header {
         margin-bottom: 24px;
