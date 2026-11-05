@@ -1929,7 +1929,7 @@
 .v2-camera-canvas {
     position: absolute;
     inset: 0;
-    background-image: url('/images/hero-cinematic.png');
+    background-image: url('/images/hero-cinematic.webp');
     background-size: cover;
     background-position: 8% center;
     background-repeat: no-repeat;

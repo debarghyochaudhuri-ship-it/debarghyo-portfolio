@@ -88,7 +88,7 @@ const projects: Project[] = [
       "https://www.figma.com/proto/jz4Q8X7OAOYpq5GK7OMmti/Export-Comment--New-concept?page-id=40000134%3A14808&node-id=40000784-151083&viewport=-38%2C244%2C0.13&t=ZEyNDUmZ71LeBtp2-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=40000784-151083",
     roleTagline: "Enterprise SaaS · Figma Plugin · Intelligaia",
     bgColorClass: "v2-card-bg-carmine",
-    image: "/Export comments/Export comments.png",
+    image: "/Export comments/Export comments.webp",
     title: "Export Comments",
     meta: "Enterprise SaaS · Figma Plugin · Intelligaia",
     headline: "Turning design feedback into actionable work",
@@ -126,10 +126,10 @@ const projects: Project[] = [
     takeaway:
       "Improving the interface wasn't enough. We needed to rethink the value the product delivered — from simply viewing comments to helping teams turn feedback into action.",
     carouselImages: [
-      "/Export comments/Export comments.png",
-      "/Export comments/Comments view.png",
-      "/Export comments/AI Task conversion.png",
-      "/Export comments/Analytics dashboard.png",
+      "/Export comments/Export comments.webp",
+      "/Export comments/Comments view.webp",
+      "/Export comments/AI Task conversion.webp",
+      "/Export comments/Analytics dashboard.webp",
     ],
   },
   {
@@ -157,7 +157,7 @@ const projects: Project[] = [
       "https://www.figma.com/proto/97IF1CRKM0yWbkNWe1iPoV/ACLIS-5.0?page-id=52398%3A37814&node-id=52626-41034&viewport=-5989%2C2161%2C0.16&t=6Cuad7QfgHKAYX8O-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=52626-41034",
     roleTagline: "Enterprise AI · Data Intelligence · Intelligaia",
     bgColorClass: "v2-card-bg-emerald",
-    image: "/Aclis/Aclis.png",
+    image: "/Aclis/Aclis.webp",
     title: "ACLIS Intelligence",
     meta: "Enterprise AI · Data Intelligence · Intelligaia",
     headline: "Making customer intelligence easier to understand and act on",
@@ -187,10 +187,10 @@ const projects: Project[] = [
     approachNote:
       "The goal was to move beyond displaying charts and numbers. I wanted to help business leaders understand what customers were saying, why it mattered and where action was needed.",
     carouselImages: [
-      "/Aclis/Dashboard.png",
-      "/Aclis/CLTV.png",
-      "/Aclis/Cohort.png",
-      "/Aclis/Competitive analysis.png",
+      "/Aclis/Dashboard.webp",
+      "/Aclis/CLTV.webp",
+      "/Aclis/Cohort.webp",
+      "/Aclis/Competitive analysis.webp",
     ],
   },
   {
@@ -218,7 +218,7 @@ const projects: Project[] = [
       "https://www.figma.com/proto/suuPQLn8vK5tEmBk2gu7ER/%3CDebarghyo%3E-%3CG-1103%3E-%3C-Air-BNB%3E?page-id=974%3A6588&node-id=974-8743&viewport=533%2C-84%2C0.1&t=6JxLLZdYWlFkYual-1&scaling=scale-down-width&content-scaling=fixed&starting-point-node-id=974%3A8743",
     roleTagline: "Mobile UX · Booking Experience",
     bgColorClass: "v2-card-bg-ruby",
-    image: "/Air bnb/Airbnb.png",
+    image: "/Air bnb/Airbnb.webp",
     title: "Airbnb Redesign",
     meta: "Mobile UX · Booking Experience",
     headline: "Making it easier to compare, choose and book with confidence",
@@ -244,10 +244,10 @@ const projects: Project[] = [
     approachNote:
       "The goal was to reduce the effort involved in comparing stays and help users make more confident booking decisions.",
     carouselImages: [
-      "/Air bnb/Airbnb.png",
-      "/Air bnb/Compare.png",
-      "/Air bnb/Map.png",
-      "/Air bnb/AI recommendation.png",
+      "/Air bnb/Airbnb.webp",
+      "/Air bnb/Compare.webp",
+      "/Air bnb/Map.webp",
+      "/Air bnb/AI recommendation.webp",
     ],
   },
   {
@@ -279,7 +279,7 @@ const projects: Project[] = [
     caseStudyUrl: "https://debarghyochaudhuri.wixstudio.com/saathi",
     roleTagline: "Social Impact · Personal Safety",
     bgColorClass: "v2-card-bg-indigo",
-    image: "/Saathi/Saathi.png",
+    image: "/Saathi/Saathi.webp",
     title: "Saathi",
     meta: "Social Impact · Personal Safety",
     headline: "Making personal safety more accessible when travelling alone",
@@ -309,10 +309,10 @@ const projects: Project[] = [
     approachNote:
       "The aim was to create an experience that makes seeking help simpler and gives users greater confidence when travelling.",
     carouselImages: [
-      "/Saathi/Home.png",
-      "/Saathi/SOS.png",
-      "/Saathi/Maps.png",
-      "/Saathi/AI assistant.png",
+      "/Saathi/Home.webp",
+      "/Saathi/SOS.webp",
+      "/Saathi/Maps.webp",
+      "/Saathi/AI assistant.webp",
     ],
   },
   {
@@ -339,7 +339,7 @@ const projects: Project[] = [
     caseStudyUrl: "https://debarghyochaudhuri.wixstudio.com/crumboard",
     roleTagline: "B2B Productivity · Agile Workflows",
     bgColorClass: "v2-card-bg-blue",
-    image: "/Scrumboard/Scrumboard.png",
+    image: "/Scrumboard/Scrumboard.webp",
     title: "Scrumboard",
     meta: "B2B Productivity · Agile Workflows",
     headline: "Bringing agile team workflows into one workspace",
@@ -365,10 +365,10 @@ const projects: Project[] = [
     approachNote:
       "The focus was to make everyday agile workflows easier to manage while helping teams stay aligned, even when working across locations.",
     carouselImages: [
-      "/Scrumboard/Dashboard.png",
-      "/Scrumboard/Scrum notes.png",
-      "/Scrumboard/Scrum setup.png",
-      "/Scrumboard/Scrumboard.png",
+      "/Scrumboard/Dashboard.webp",
+      "/Scrumboard/Scrum notes.webp",
+      "/Scrumboard/Scrum setup.webp",
+      "/Scrumboard/Scrumboard.webp",
     ],
   },
   {
@@ -396,7 +396,7 @@ const projects: Project[] = [
       "https://preview.webflow.com/preview/wellness-app-29d5a9?utm_medium=preview_link&utm_source=designer&utm_content=wellness-app-29d5a9&preview=1ad0ef232f03e2958327e85c60402276&workflow=sitePreview",
     roleTagline: "Healthtech · Wellness Tracking",
     bgColorClass: "v2-card-bg-teal",
-    image: "/Wellness app/Wellness app.png",
+    image: "/Wellness app/Wellness app.webp",
     title: "WellnessSync",
     meta: "Healthtech · Wellness Tracking",
     headline: "Making health data easier to understand and act on",
@@ -422,10 +422,10 @@ const projects: Project[] = [
     approachNote:
       "The goal was to move away from overwhelming users with numbers and create a more approachable experience that helps them stay connected to their health goals.",
     carouselImages: [
-      "/Wellness app/Home.png",
-      "/Wellness app/Activity.png",
-      "/Wellness app/Workout.png",
-      "/Wellness app/Community.png",
+      "/Wellness app/Home.webp",
+      "/Wellness app/Activity.webp",
+      "/Wellness app/Workout.webp",
+      "/Wellness app/Community.webp",
     ],
   },
 ];
@@ -451,8 +451,10 @@ const experiences: ExperienceItem[] = [
     educationHighlight: {
       logo: (
         <img
-          src="/images/Sunderland.png"
+          src="/images/Sunderland.webp"
           alt="University of Sunderland Logo"
+          loading="lazy"
+          decoding="async"
           style={{
             width: "100%",
             height: "100%",
@@ -478,8 +480,10 @@ const experiences: ExperienceItem[] = [
     location: "Chandigarh",
     logo: (
       <img
-        src="/images/Intelligaia.png"
+        src="/images/Intelligaia.webp"
         alt="Intelligaia Logo"
+        loading="lazy"
+        decoding="async"
         style={{
           width: "100%",
           height: "100%",
@@ -524,8 +528,10 @@ const experiences: ExperienceItem[] = [
     location: "India",
     logo: (
       <img
-        src="/images/fortune-agro-net.png"
+        src="/images/fortune-agro-net.webp"
         alt="Fortune Agro Net Logo"
+        loading="lazy"
+        decoding="async"
         style={{
           width: "100%",
           height: "100%",
@@ -547,8 +553,10 @@ const experiences: ExperienceItem[] = [
     location: "Mumbai",
     logo: (
       <img
-        src="/images/DNEG.png"
+        src="/images/DNEG.webp"
         alt="DNEG Logo"
+        loading="lazy"
+        decoding="async"
         style={{
           width: "100%",
           height: "100%",
@@ -571,8 +579,10 @@ const educationList: EducationItem[] = [
     badge: "In Progress",
     logo: (
       <img
-        src="/images/Sunderland.png"
+        src="/images/Sunderland.webp"
         alt="University of Sunderland Logo"
+        loading="lazy"
+        decoding="async"
         style={{
           width: "100%",
           height: "100%",
@@ -842,65 +852,9 @@ export default function PortfolioPage() {
     const video = videoRef.current;
     if (!video) return;
 
-    // Enforce iPad / iOS Safari inline autoplay prerequisites
-    video.defaultMuted = true;
-    video.muted = true;
-    video.playsInline = true;
-    video.loop = false;
-    video.setAttribute("playsinline", "true");
-    video.setAttribute("webkit-playsinline", "true");
-    video.setAttribute("muted", "");
-
     let blurTriggered = false;
     let animId: number;
     let lastAppliedRate = 1.0;
-    let interactionListenerAttached = false;
-
-    const cleanupInteractionListeners = () => {
-      if (interactionListenerAttached) {
-        window.removeEventListener("touchstart", onFirstInteraction);
-        window.removeEventListener("scroll", onFirstInteraction);
-        window.removeEventListener("pointerdown", onFirstInteraction);
-        interactionListenerAttached = false;
-      }
-    };
-
-    const onFirstInteraction = () => {
-      cleanupInteractionListeners();
-      if (video && video.paused) {
-        video.play().catch(() => {});
-      }
-    };
-
-    const tryPlay = () => {
-      if (!video || !video.paused) return;
-      video.muted = true;
-      video.defaultMuted = true;
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Fallback for iPad low-power mode or strict autoplay restrictions:
-          // Resume on user's first touch/scroll gesture (guaranteed single registration)
-          if (!interactionListenerAttached) {
-            interactionListenerAttached = true;
-            window.addEventListener("touchstart", onFirstInteraction, { passive: true });
-            window.addEventListener("scroll", onFirstInteraction, { passive: true });
-            window.addEventListener("pointerdown", onFirstInteraction, { passive: true });
-          }
-        });
-      }
-    };
-
-    // Attempt immediate inline playback on mount (initiates buffering in WebKit on iOS/iPadOS)
-    tryPlay();
-
-    // Also retry on loadedmetadata in case WebKit media pipeline needed metadata resolution
-    const onLoadedMetadata = () => {
-      if (video && video.paused) {
-        tryPlay();
-      }
-    };
-    video.addEventListener("loadedmetadata", onLoadedMetadata, { once: true });
 
     const checkSettle = () => {
       if (!video) return;
@@ -964,8 +918,6 @@ export default function PortfolioPage() {
 
     return () => {
       cancelAnimationFrame(animId);
-      cleanupInteractionListeners();
-      video.removeEventListener("loadedmetadata", onLoadedMetadata);
       video.removeEventListener("play", onPlay);
       video.removeEventListener("timeupdate", onTimeUpdate);
       video.removeEventListener("ended", onEnded);
@@ -1561,19 +1513,13 @@ export default function PortfolioPage() {
               muted
               playsInline
               {...({ "webkit-playsinline": "true" } as Record<string, string>)}
-              poster="/images/hero-cinematic.png"
-              preload="auto"
+              poster="/images/hero-cinematic.webp"
+              preload="metadata"
               disablePictureInPicture
               disableRemotePlayback
               aria-hidden="true"
             >
               <source src="/videos/hero-background.mp4" type="video/mp4" />
-              <img
-                src="/images/hero-cinematic.png"
-                alt=""
-                className="v2-scene-base-img"
-                aria-hidden="true"
-              />
             </video>
           </div>
         </div>
@@ -1834,7 +1780,8 @@ export default function PortfolioPage() {
                       <img
                         src={project.image}
                         alt={`${project.title} UI screen`}
-                        loading="eager"
+                        loading="lazy"
+                        decoding="async"
                       />
                     </div>
                   </div>
@@ -2269,8 +2216,10 @@ export default function PortfolioPage() {
                     aria-label="Google Antigravity"
                   >
                     <img
-                      src="/images/antigravity.png"
+                      src="/images/antigravity.webp"
                       alt="Google Antigravity"
+                      loading="lazy"
+                      decoding="async"
                       style={{
                         width: "20px",
                         height: "20px",
@@ -2358,6 +2307,8 @@ export default function PortfolioPage() {
                     }
                     alt={`${activeProject.title} preview slide ${activeSlideIndex + 1}`}
                     className="modal-carousel-img"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
 
@@ -2644,9 +2595,11 @@ export default function PortfolioPage() {
               <div className="about-modal-photo-col">
                 <div className="about-modal-photo-wrapper">
                   <img
-                    src="/images/about%20me.png"
+                    src="/images/about-me.webp"
                     alt="Debarghyo Chaudhuri"
                     className="about-modal-photo"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               </div>
